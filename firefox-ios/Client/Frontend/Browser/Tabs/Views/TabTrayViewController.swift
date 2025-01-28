@@ -546,14 +546,11 @@ class TabTrayViewController: UIViewController,
                                            style: .default,
                                            handler: { _ in
                                                self.confirmCloseAll()
-                                               self.handlePopupDismissal()
                                            }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
-                                           handler: { _ in
-                                               self.handlePopupDismissal()
-                                           }),
+                                           handler: nil),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = deleteButton
         controller.popoverPresentationController?.delegate = self
@@ -561,7 +558,7 @@ class TabTrayViewController: UIViewController,
     }
 
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-        handlePopupDismissal()
+        // No need to handle dismissal as the button should always be enabled
     }
 
     private func confirmCloseAll() {
@@ -598,8 +595,7 @@ class TabTrayViewController: UIViewController,
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self, name: .popupDismissed, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
