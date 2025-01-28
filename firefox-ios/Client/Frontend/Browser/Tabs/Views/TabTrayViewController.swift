@@ -218,6 +218,7 @@ class TabTrayViewController: UIViewController,
         listenForThemeChange(view)
         updateToolbarItems()
         NotificationCenter.default.addObserver(self, selector: #selector(handlePopupDismissal), name: .popupDismissed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePopupDismissal), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -547,7 +548,7 @@ class TabTrayViewController: UIViewController,
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: { _ in
-                                               NotificationCenter.default.post(name: .popupDismissed, object: nil)
+                                               self.handlePopupDismissal()
                                            }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = deleteButton
@@ -589,6 +590,7 @@ class TabTrayViewController: UIViewController,
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: .popupDismissed, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 }
 
