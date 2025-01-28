@@ -534,10 +534,7 @@ class TabTrayViewController: UIViewController,
 
     @objc
     private func deleteTabsButtonTapped() {
-        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
-                                        windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeAllTabs)
-        store.dispatch(action)
+        showCloseAllConfirmation()
     }
 
     private func showCloseAllConfirmation() {
