@@ -24,7 +24,8 @@ protocol TabTrayViewControllerDelegate: AnyObject {
 class TabTrayViewController: UIViewController,
                              TabTrayController,
                              UIToolbarDelegate,
-                             StoreSubscriber {
+                             StoreSubscriber,
+                             UIPopoverPresentationControllerDelegate {
     typealias SubscriberStateType = TabTrayState
     struct UX {
         struct NavigationMenu {
@@ -555,7 +556,12 @@ class TabTrayViewController: UIViewController,
                                            }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = deleteButton
+        controller.popoverPresentationController?.delegate = self
         present(controller, animated: true, completion: nil)
+    }
+
+    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
+        handlePopupDismissal()
     }
 
     private func confirmCloseAll() {
