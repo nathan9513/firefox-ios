@@ -543,7 +543,10 @@ class TabTrayViewController: UIViewController,
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
-                                           handler: { _ in self.confirmCloseAll() }),
+                                           handler: { _ in
+                                               self.confirmCloseAll()
+                                               self.handlePopupDismissal()
+                                           }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
