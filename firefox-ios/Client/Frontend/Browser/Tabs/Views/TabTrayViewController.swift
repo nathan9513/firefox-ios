@@ -541,27 +541,27 @@ class TabTrayViewController: UIViewController,
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .LegacyAppMenu.AppMenuCloseAllTabsTitleString,
                                            style: .default,
-                                           handler: { _ in
-                                               self.confirmCloseAll()
-                                           }),
+                                           handler: { _ in self.confirmCloseAll() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
-                                           handler: nil),
+                                           handler: { _ in self.cancelCloseAll() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = deleteButton
-        controller.popoverPresentationController?.delegate = self
         present(controller, animated: true, completion: nil)
-    }
-
-    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-        // No need to handle dismissal as the button should always be enabled
     }
 
     private func confirmCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.confirmCloseAllTabs)
+        store.dispatch(action)
+    }
+
+    private func cancelCloseAll() {
+        let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
         store.dispatch(action)
     }
 
@@ -598,4 +598,25 @@ class TabTrayViewController: UIViewController,
 
 extension Notification.Name {
     static let popupDismissed = Notification.Name("popupDismissed")
+}
+
+static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
+    switch action.actionType {
+    case TabPanelViewActionType.closeAllTabs:
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount,
+                            showCloseConfirmation: true)
+    case TabPanelViewActionType.cancelCloseAllTabs:
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount,
+                            showCloseConfirmation: false)
+    default:
+        return defaultState(from: state)
+    }
 }
