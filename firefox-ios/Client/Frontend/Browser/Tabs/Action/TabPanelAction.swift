@@ -56,7 +56,7 @@ enum TabPanelMiddlewareActionType: ActionType {
     case scrollToTab
 }
 
-static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
+func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
     switch action.actionType {
     case .confirmCloseAllTabs:
         return TabTrayState(windowUUID: state.windowUUID,
