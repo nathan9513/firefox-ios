@@ -45,25 +45,11 @@ class TabPanelViewAction: Action {
     }
 }
 
-enum TabPanelViewActionType: ActionType {
-    case tabPanelDidLoad
-    case tabPanelWillAppear
-    case tabPanelDidAppear
-    case addNewTab
-    case closeTab
-    case undoClose
-    case closeAllTabs
+enum TabPanelViewActionType {
     case confirmCloseAllTabs
-    case undoCloseAllTabs
-    case moveTab
-    case toggleInactiveTabs
-    case closeInactiveTab
-    case undoCloseInactiveTab
-    case closeAllInactiveTabs
-    case undoCloseAllInactiveTabs
-    case learnMorePrivateMode
-    case selectTab
-    case hideUndoToast
+    case cancelCloseAllTabs
+    case addNewTab
+    // ... altre azioni ...
 }
 
 class TabPanelMiddlewareAction: Action {
@@ -95,4 +81,29 @@ enum TabPanelMiddlewareActionType: ActionType {
     case refreshInactiveTabs
     case showToast
     case scrollToTab
+}
+
+static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
+    switch action.actionType {
+    case .confirmCloseAllTabs:
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount,
+                            showCloseConfirmation: true)
+    case .cancelCloseAllTabs:
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount,
+                            showCloseConfirmation: false)
+    default:
+        return defaultState(from: state)
+    }
+}
+
+func defaultState(from state: TabTrayState) -> TabTrayState {
+    return state
 }

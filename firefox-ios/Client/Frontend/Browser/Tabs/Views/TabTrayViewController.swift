@@ -569,7 +569,7 @@ class TabTrayViewController: UIViewController,
     private func newTabButtonTapped() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.addNewTab)
+                                        actionType: .addNewTab)
         store.dispatch(action)
     }
 
