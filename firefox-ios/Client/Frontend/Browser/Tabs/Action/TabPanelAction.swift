@@ -12,44 +12,17 @@ struct MoveTabData {
     let isPrivate: Bool
 }
 
-class TabPanelViewAction: Action {
-    let panelType: TabTrayPanelType?
-    let isPrivateModeActive: Bool?
-    let urlRequest: URLRequest?
-    let tabUUID: TabUUID?
-    let moveTabData: MoveTabData?
-    let toastType: ToastType?
-    let shareSheetURL: URL?
-    let isInactiveTab: Bool?
-
-    init(panelType: TabTrayPanelType?,
-         isPrivateModeActive: Bool? = nil,
-         urlRequest: URLRequest? = nil,
-         tabUUID: TabUUID? = nil,
-         moveTabData: MoveTabData? = nil,
-         toastType: ToastType? = nil,
-         shareSheetURL: URL? = nil,
-         isInactiveTab: Bool? = nil,
-         windowUUID: WindowUUID,
-         actionType: ActionType) {
-        self.panelType = panelType
-        self.isPrivateModeActive = isPrivateModeActive
-        self.urlRequest = urlRequest
-        self.tabUUID = tabUUID
-        self.moveTabData = moveTabData
-        self.toastType = toastType
-        self.shareSheetURL = shareSheetURL
-        self.isInactiveTab = isInactiveTab
-        super.init(windowUUID: windowUUID,
-                   actionType: actionType)
-    }
-}
-
 enum TabPanelViewActionType {
     case confirmCloseAllTabs
     case cancelCloseAllTabs
     case addNewTab
     // ... altre azioni ...
+}
+
+struct TabPanelViewAction {
+    let panelType: TabTrayPanelType
+    let windowUUID: WindowUUID
+    let actionType: TabPanelViewActionType
 }
 
 class TabPanelMiddlewareAction: Action {
