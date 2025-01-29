@@ -554,14 +554,14 @@ class TabTrayViewController: UIViewController,
     private func confirmCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.confirmCloseAllTabs)
+                                        actionType: .confirmCloseAllTabs)
         store.dispatch(action)
     }
 
     private func cancelCloseAll() {
         let action = TabPanelViewAction(panelType: tabTrayState.selectedPanel,
                                         windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.cancelCloseAllTabs)
+                                        actionType: .cancelCloseAllTabs)
         store.dispatch(action)
     }
 
@@ -600,16 +600,16 @@ extension Notification.Name {
     static let popupDismissed = Notification.Name("popupDismissed")
 }
 
-static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
+func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
     switch action.actionType {
-    case TabPanelViewActionType.closeAllTabs:
+    case .confirmCloseAllTabs:
         return TabTrayState(windowUUID: state.windowUUID,
                             isPrivateMode: state.isPrivateMode,
                             selectedPanel: state.selectedPanel,
                             normalTabsCount: state.normalTabsCount,
                             hasSyncableAccount: state.hasSyncableAccount,
                             showCloseConfirmation: true)
-    case TabPanelViewActionType.cancelCloseAllTabs:
+    case .cancelCloseAllTabs:
         return TabTrayState(windowUUID: state.windowUUID,
                             isPrivateMode: state.isPrivateMode,
                             selectedPanel: state.selectedPanel,
